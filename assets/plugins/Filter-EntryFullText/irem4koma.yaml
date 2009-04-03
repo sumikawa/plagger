@@ -1,0 +1,7 @@
+# irem 4koma
+author: sumikawa
+custom_feed_handle: http://www\.irem\.co\.jp/contents/4koma/\d{3}_\d{3}
+custom_feed_follow_link: mess_\d{3}\.html
+handle: http://www\.irem\.co\.jp/contents/4koma/\d{3}_\d{3}/mess_\d{3}\.html
+extract: <p>(<img src="image/m_\d{3}\.(?:jpg|gif)" width=\d+ height=\d+ align=center alt="[^"]*">)
+extract_capture: body
