@@ -1,0 +1,6 @@
+author: Naoki Tomita
+custom_feed_handle: http://(?:movie\.)maeda-y\.com/$
+custom_feed_follow_link: movie/.+\.htm
+handle: http://(?:movie\.)maeda-y\.com/movie/.+\.htm
+extract: <title>(.*?)</title>.*?<h2>.*?</h2>.*?(<p>.*</p>).*?<div class="ad">
+extract_capture: title body
