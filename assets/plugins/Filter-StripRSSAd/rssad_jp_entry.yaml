@@ -1,0 +1,2 @@
+condition: $args->{entry}->link =~ m!^http://rss\.rssad\.jp/rss/ad/\w+/\w+\?type=\d+! && $args->{entry}->title =~ m!^PR:!
+strip: 1
