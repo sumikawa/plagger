@@ -99,7 +99,7 @@ sub store_entry {
     $msg->add('X-Tags', encode('MIME-Header', join(' ', @{ $entry->tags })));
     my $xmailer = "Plagger/$Plagger::VERSION";
     $msg->replace('X-Mailer', $xmailer);
-    store_maildir($self, $context, $msg->as_string(), $id);
+    store_maildir($self, $context, $msg->as_string(), $feed_title, $id);
     $self->{msg} += 1;
 }
 
@@ -184,7 +184,7 @@ sub enclosure_id {
 }
 
 sub store_maildir {
-    my($self, $context, $msg, $id) = @_;
+    my($self, $context, $msg, $folder, $id) = @_;
     my $filename = $id . ".plagger";
     find(
         sub {
@@ -195,8 +195,26 @@ sub store_maildir {
         },
         $self->{path} . "/cur"
     );
-    $context->log(debug => "writing: new/$filename");
-    my $path = $self->{path} . "/new/" . $filename;
+
+    my $path = $self->{path};
+
+    # TODO: Does not work in Maildir root
+    if ($self->conf->{create_subfolders}) {
+        $path .= ".$folder";
+        unless (-d $path) {
+            mkdir($path, 0700)
+                or die $context->log(error => "Could not create $path");
+            $context->log(info           => "Create new folder ($path)");
+        }
+        unless (-d $path . "/new") {
+            mkdir($path . "/new", 0700)
+                or die $context->log(error => "Could not Create $path/new");
+            $context->log(info           => "Create new folder($path/new)");
+        }
+    }
+
+    $path .= "/new/$filename";
+    $context->log(debug => "writing: $path");
     open my $fh, ">", $path or $context->error("$path: $!");
     print $fh $msg;
     close $fh;
