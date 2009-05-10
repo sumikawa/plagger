@@ -1,7 +1,7 @@
 author: woremacx, emasaka
 handle: http://www\.nikkei\.co\.jp/news/
 extract_xpath:
-  title: //h3[@class="topNews-ttl3"]
+  title: //h3[@class="topNews-ttl3"]/text()
   body: //div[@class="article-cap"]
 extract_after_hook: |
   {
