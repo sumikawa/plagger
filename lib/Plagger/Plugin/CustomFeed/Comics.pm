@@ -30,75 +30,58 @@ sub aggregate {
     my($self, $context, $args) = @_;
 
     my $feed = Plagger::Feed->new;
-    $feed->type('bunko');
+    $feed->type('comics');
     $feed->title('コミックス');
-    $feed->link('http://www.taiyosha.co.jp/comic/');
+    $feed->link('http://http://www.mangaoh.co.jp/download/index.php');
 
     my $showndate = DateTime->today->add(days => 3);
     my $bookdate = $showndate->clone();
     my $body = "";
 
-    for (my $i = 1; $i < 3; $i++) {
-	my $filename = 'comic' . sprintf("%02d", $showndate->year - 2000) .
-	    sprintf("%02d", $showndate->month) . '_cyo' . $i . '.html';
-	my $url = "http://www.taiyosha.co.jp/comic/$filename";
-	my $file = $self->cache->path_to($filename);
+    my $filename = 'comic' . sprintf("%04d", $showndate->year) .
+	sprintf("%02d", $showndate->month) . '.csv';
+    my $url = sprintf("http://www.mangaoh.co.jp/download/$filename");
+    my $file = $self->cache->path_to($filename);
 
-	my $ua = Plagger::UserAgent->new;
-	my $res = $ua->mirror($url => $file);
+    my $ua = Plagger::UserAgent->new;
+    my $res = $ua->mirror($url => $file);
 
-	if ($res->is_error){
-	    $context->log( error => $res->status_line );
-	    return;
-	}
-
-	open my $fh, "<:encoding(shift-jis)", $file
-	    or return $context->log(error => "$file: $!");
-
-	my ($author, $title, $company, $date);
-	my $authflag = 0;
-
-	while (<$fh>) {
-	    m! +<TD WIDTH=100 BGCOLOR=#efefef><font size=-1>(.*)</font><br></TD>!
-		and do {
-		    if ( $authflag == 0 ) {
-			$author = $1;
-			$authflag = 1;
-		    } else {
-			$company = $1;
-			$authflag = 0;
-		    };
-	    };
-	    m! +<TD WIDTH=300 BGCOLOR=#efefef><font size=-1>(.*)</font><br></TD>!
-     		and $title = $1;
-	    m! +<TD WIDTH=50 BGCOLOR=#efefef><div align=center><font size=-1>(.*)</font><br></div></TD>!
-		and $date = $1;
-
-	    m! +.*</TD></TR>!
-		and do {
-		    my ($month, $day) = split('/', $date);
-		    next if (($month eq "") || ($day eq ""));
-		    if ($day eq "上") { $day = "10"; };
-		    if ($day eq "中") { $day = "20"; };
-		    if ($day eq "下") { $day = "28"; };
-		    if ($day eq "未定") { $day = "28"; };
-		    $bookdate->set(month => $month, day => $day);
-		    if (DateTime->compare($showndate, $bookdate) == 0) {
-			next if ($title =~ "（成）");
-			next if ($author =~ "アンソロジー");
-			$title =~ tr/Ａ-Ｚａ-ｚ０-９（）！？　/A-Za-z0-9()!? /;
-			my $keywords = $author;
-			utf8::encode($keywords);
-			$keywords =~s /(\W)/'%' . unpack('H2',$1)/eg;
-			$keywords =~s /\s/+/g;
-			utf8::decode($keywords);
-			my $link = 'http://www.amazon.co.jp/exec/obidos/search-handle-url/index=books-jp&rank=+daterank&field-keywords=' . $keywords;
-			$body = $body . $author . ' / ' . "<A HREF=\"$link\">" . $title  . "</A>" . ' (' . $company . ")<BR>\n";
-		    }
-	    }
-	}
-	close($fh);
+    if ($res->is_error){
+	$context->log( error => $res->status_line );
+	return;
     }
+
+    open my $fh, "<:encoding(shift-jis)", $file
+	or return $context->log(error => "$file: $!");
+
+    my $authflag = 0;
+
+    while (<$fh>) {
+	my ($company, $date, $title, $author, $price, $genre) = split(/","/);
+	my ($year, $month, $day) = split('/', $date);
+	next if ($month == 0);
+
+	if ($day eq "上") { $day = "10"; };
+	if ($day eq "中") { $day = "20"; };
+	if ($day eq "下") { $day = "28"; };
+	if ($day eq "未") { $day = "28"; };
+	$context->log( log => $day );
+	$bookdate->set(month => $month, day => $day);
+	if (DateTime->compare($showndate, $bookdate) == 0) {
+#		next if ($title =~ "（成）");
+#		next if ($author =~ "アンソロジー");
+	    $title =~ tr/Ａ-Ｚａ-ｚ０-９（）！？　/A-Za-z0-9()!? /;
+	    my $keywords = $author;
+	    utf8::encode($keywords);
+	    $keywords =~s /(\W)/'%' . unpack('H2',$1)/eg;
+	    $keywords =~s /\s/+/g;
+	    utf8::decode($keywords);
+	    my $link = 'http://www.amazon.co.jp/exec/obidos/search-handle-url/index=books-jp&rank=+daterank&field-keywords=' . $keywords;
+	    $body = $body . $author . ' / ' . "<A HREF=\"$link\">" . $title  . "</A>" . ' (' . $company . ")<BR>\n";
+	}
+    }
+    close($fh);
+
     my $entry = Plagger::Entry->new;
     $entry->body($body);
     $entry->date($showndate);
@@ -122,101 +105,19 @@ __END__
 
 =head1 NAME
 
-Plagger::Plugin::CustomFeed::NetLadio - Custom feed for livedoor Internet ladio
+Plagger::Plugin::CustomFeed::Comics - Custom feed for Manga releasing date in Japan
 
 =head1 SYNOPSIS
 
-  - module: CustomFeed::NetLadio
-    config:
-      limit: 5
-      sort: tims
-      order: asc
+  - module: CustomFeed::Comics
 
 =head1 DESCRIPTION
 
-This plugin fetches programs from livedoor Internet ladio(L<http://live.ladio.livedoor.com/>).
-
-=head1 CONFIG
-
-=over 4
-
-=item limit
-
-Number of programs.
-
-=item sort
-
-Sort item.
-
-=over 4
-
-=item url
-
-URL column specified with broadcasting tool
-
-=item gnl
-
-Genre column specified with broadcasting tool
-
-=item nam
-
-Title column specified with broadcasting tool
-
-=item tit
-
-Name of a song information now at the time of transmit by broadcasting tool
-
-=item mnt
-
-Mount point
-
-=item tims
-
-Start of the broadcasting time
-
-=item cln
-
-Number of present listeners
-
-=item clns
-
-Number of total listeners that Icecast1.3 faction outputs
-
-=item srv
-
-Delivery server host name
-
-=item prt
-
-Delivery server port number
-
-=item bit
-
-Bit rate
-
-=back
-
-=item order
-
-The permutation order.
-
-=over 4
-
-=item asc
-
-Ascending order
-
-=item desc
-
-Descending order
-
-=back
-
-=back
+This plugin fetches comic releasing date from MANGAOH CLUB (L<http://http://www.mangaoh.co.jp/download/index.php>).
 
 =head1 AUTHOR
 
-Motokazu Sekine (CHEEBOW)
+Munechika Sumikawa
 
 =head1 SEE ALSO
 
