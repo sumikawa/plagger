@@ -9,6 +9,7 @@ use utf8;
 use DateTime::Format::Strptime;
 use Plagger::UserAgent;
 use URI::Escape;
+use Text::CSV_XS;
 
 sub register {
     my($self, $context) = @_;
@@ -55,9 +56,11 @@ sub aggregate {
 	or return $context->log(error => "$file: $!");
 
     my $authflag = 0;
+    my $csv=Text::CSV_XS->new({binary=>1});
 
     while (<$fh>) {
-	my ($company, $date, $title, $author, $price, $genre) = split(/","/);
+	my $status=$csv->parse($_);
+	my ($company, $date, $title, $author, $price, $genre) = $csv->fields();
 	my ($year, $month, $day) = split('/', $date);
 	next if ($month == 0);
 
@@ -65,7 +68,6 @@ sub aggregate {
 	if ($day eq "中") { $day = "20"; };
 	if ($day eq "下") { $day = "28"; };
 	if ($day eq "未") { $day = "28"; };
-	$context->log( log => $day );
 	$bookdate->set(month => $month, day => $day);
 	if (DateTime->compare($showndate, $bookdate) == 0) {
 #		next if ($title =~ "（成）");
@@ -77,7 +79,7 @@ sub aggregate {
 	    $keywords =~s /\s/+/g;
 	    utf8::decode($keywords);
 	    my $link = 'http://www.amazon.co.jp/exec/obidos/search-handle-url/index=books-jp&rank=+daterank&field-keywords=' . $keywords;
-	    $body = $body . $author . ' / ' . "<A HREF=\"$link\">" . $title  . "</A>" . ' (' . $company . ")<BR>\n";
+	    $body = $body . $author . ' / ' . "<a href=\"$link\">" . $title  . "</a>" . ' (' . $company . ")<br />\n";
 	}
     }
     close($fh);
