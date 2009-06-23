@@ -1,5 +1,4 @@
 # Plagger::Plugin::CustomFeed::Comics
-# $Id$
 package Plagger::Plugin::CustomFeed::Comics;
 use strict;
 use base qw( Plagger::Plugin );
