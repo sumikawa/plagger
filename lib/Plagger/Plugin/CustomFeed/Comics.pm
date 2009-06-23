@@ -32,7 +32,7 @@ sub aggregate {
     my $feed = Plagger::Feed->new;
     $feed->type('comics');
     $feed->title('コミックス');
-    $feed->link('http://http://www.mangaoh.co.jp/download/index.php');
+    $feed->link('http://www.mangaoh.co.jp/download/index.php');
 
     my $showndate = DateTime->today->add(days => 3);
     my $bookdate = $showndate->clone();
@@ -69,8 +69,8 @@ sub aggregate {
 	if ($day eq "未") { $day = "28"; };
 	$bookdate->set(month => $month, day => $day);
 	if (DateTime->compare($showndate, $bookdate) == 0) {
-#		next if ($title =~ "（成）");
-#		next if ($author =~ "アンソロジー");
+		next if ($genre =~ "耽美");
+		next if ($genre =~ "成年");
 	    $title =~ tr/Ａ-Ｚａ-ｚ０-９（）！？　/A-Za-z0-9()!? /;
 	    my $keywords = $author;
 	    utf8::encode($keywords);
