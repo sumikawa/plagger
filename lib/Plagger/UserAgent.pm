@@ -80,13 +80,13 @@ sub mirror {
 
         if (defined $content_length and $file_length < $content_length) {
             unlink($tmpfile);
-            die "Transfer truncated: " .
-                "only $file_length out of $content_length bytes received\n";
+            Plagger->context->log(error=> "Transfer truncated: " .
+                "only $file_length out of $content_length bytes received\n");
         }
         elsif (defined $content_length and $file_length > $content_length) {
             unlink($tmpfile);
-            die "Content-length mismatch: " .
-                "expected $content_length bytes, got $file_length\n";
+            Plagger->context->log(error=> "Content-length mismatch: " .
+                "expected $content_length bytes, got $file_length\n");
         }
         else {
             # OK
@@ -96,7 +96,7 @@ sub mirror {
                 unlink $file;
             }
             rename($tmpfile, $file) or
-                die "Cannot rename '$tmpfile' to '$file': $!\n";
+                Plagger->context->log(error=> "Cannot rename '$tmpfile' to '$file': $!\n");
 
             if (my $lm = $response->last_modified) {
                 # make sure the file has the same last modification time
