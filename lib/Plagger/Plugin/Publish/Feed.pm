@@ -63,6 +63,14 @@ sub publish_feed {
         $feed->{atom}->id("tag:$taguri_base,2006:" . $f->id); # XXX what if id is empty?
     }
 
+    if ($self->conf->{hub} && $feed_format eq 'Atom') {
+        $feed->{atom}->add_link({ rel => 'hub', href => $self->conf->{hub}, });
+    }
+
+    if ($self->conf->{self} && $feed_format eq 'Atom') {
+        $feed->{atom}->add_link({ rel => 'self', href => $self->conf->{self}, });
+    }
+
     # add entry
     for my $e ($f->entries) {
         my $entry = XML::Feed::Entry->new($feed_format);
