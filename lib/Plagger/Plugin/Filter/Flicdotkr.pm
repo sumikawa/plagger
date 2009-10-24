@@ -18,9 +18,13 @@ sub filter {
         if ($opt eq 'long' && $uri =~ /flic\.kr/) {
             $count++;
             return makealongerlink($orig_uri, $userid);
-        } elsif ($opt eq 'short' && $uri =~ /www\.flickr\.com/) {
+        }
+        elsif ($opt eq 'short' && $uri =~ /www\.flickr\.com/) {
             $count++;
             return makeashorterlink($orig_uri);
+        }
+        else {
+            return $orig_uri;
         }
     });
 
