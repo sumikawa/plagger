@@ -1,0 +1,6 @@
+# http://blog.so-net.ne.jp/
+author: poppen
+handle: http://([\w\-]+\.)?blog\.so-net\.ne\.jp/((\w|\d|-)+/)?\d{4}-\d{2}-\d{2}
+extract_xpath:
+  body: //div[@class='articles-body' or @id='TMclip1']
+
