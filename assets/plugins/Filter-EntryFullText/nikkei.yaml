@@ -1,8 +1,11 @@
-author: woremacx
+author: woremacx, emasaka
 handle: http://www\.nikkei\.co\.jp/news/
-extract: <!--FJZONE START NAME="MIDASHI" -->(.+?)<!--FJZONE END NAME="MIDASHI" -->\s</h1>\s<p>(.+?)&nbsp;&nbsp;\((\d{2}:\d{2})\)
-extract_capture: title body time
+extract_xpath:
+  title: //h3[@class="topNews-ttl3"]/text()
+  body: //div[@class="article-cap"]
 extract_after_hook: |
-  if ($args->{entry}->link =~ m!/news/\w+?/(\d{4})(\d\d)(\d\d)!) {
-   $data->{date} = "$1/$2/$3 $data->{time} JST";
+  {
+    my ($y, $m, $d) = $args->{entry}->link =~ m!/news/\w+?/(\d{4})(\d\d)(\d\d)!;
+    my ($tm) = $data->{body} =~ m!\((\d+:\d+)\).*?\Z!;
+    $data->{date} = "$y/$m/$d $tm:00 JST";
   }
