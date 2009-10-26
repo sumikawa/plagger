@@ -2,7 +2,6 @@ package Plagger::Plugin::Filter::Flicdotkr;
 use strict;
 use base qw( Plagger::Plugin::Filter::Base );
 
-use URI;
 use URI::Find;
 use Encode::Base58;
 
@@ -15,13 +14,15 @@ sub filter {
 
     my $finder = URI::Find->new(sub {
         my ($uri, $orig_uri) = @_;
-        if ($opt eq 'long' && $uri =~ /flic\.kr/) {
+        if ($opt eq 'long' && $uri =~ /flic\.kr\/p\/(\w+)/) {
             $count++;
-            return makealongerlink($orig_uri, $userid);
+            my $photo_id = decode_base58($1);
+            return qq{http://www.flickr.com/photos/$userid/$photo_id/};
         }
-        elsif ($opt eq 'short' && $uri =~ /www\.flickr\.com/) {
+        elsif ($opt eq 'short' && $uri =~ /www\.flickr\.com\/photos\/\w+\/(\d+)/) {
             $count++;
-            return makeashorterlink($orig_uri);
+            my $encoded_id = encode_base58($1);
+            return qq{http://flic.kr/p/$encoded_id};
         }
         else {
             return $orig_uri;
@@ -30,26 +31,6 @@ sub filter {
 
     $finder->find(\$body);
     ($count, $body);
-}
-
-sub makealongerlink {
-    my ($orig_uri, $userid) = @_;
-
-    my $uri = URI->new($orig_uri);
-    my @args = split(/\//, $uri->path);
-    my $photo_id = decode_base58( $args[-1] );
-
-    return qq{http://www.flickr.com/photos/$userid/$photo_id/};
-}
-
-sub makeashorterlink {
-    my ($orig_uri) = @_;
-
-    my $uri = URI->new($orig_uri);
-    my @args = split(/\//, $uri->path);
-    my $encoded_id = encode_base58( $args[-1] );
-    
-    return qq{http://flic.kr/p/$encoded_id};
 }
 
 1;
