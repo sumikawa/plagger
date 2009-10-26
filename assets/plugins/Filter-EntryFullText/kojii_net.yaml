@@ -5,5 +5,5 @@ custom_feed_follow_link: /\w+/\w+\d+\.html$
 handle: http://www\.kojii\.net/\w+/\w+\d+\.html$
 extract_xpath:
 #  title: /html/head//title
-  body: /html/body//table
-#extract_after_hook: $data->{title} =~ s|</?TITLE>||ig   
+  body: /html/body//table//table//td[1]
+#extract_after_hook: $data->{title} =~ s|</?TITLE>||ig
