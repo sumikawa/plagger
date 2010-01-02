@@ -17,8 +17,5 @@ plugins:
         - title: bar
           body: http://www.example.com/
   - module: Filter::Flicdotkr
-    config:
-      be: long
-      userid: poppen
 --- expected
 is $context->update->feeds->[0]->entries->[0]->body, "http://www.example.com/"
