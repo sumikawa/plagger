@@ -6,27 +6,29 @@ use URI::Find;
 use WWW::Shorten::Flickr;
 
 sub filter {
-    my($self, $body) = @_;
+    my ( $self, $body ) = @_;
 
     my $count = 0;
 
-    my $finder = URI::Find->new(sub {
-        my ($uri, $orig_uri) = @_;
-        if ( $uri =~ /flic\.kr\/p\/\w+/ ) {
-            $count++;
-            return WWW::Shorten::Flickr::makealongerlink($uri);
+    my $finder = URI::Find->new(
+        sub {
+            my ( $uri, $orig_uri ) = @_;
+            if ( $uri =~ /flic\.kr\/p\/\w+/ ) {
+                $count++;
+                return WWW::Shorten::Flickr::makealongerlink($uri);
+            }
+            elsif ( $uri =~ /www\.flickr\.com\/photos\/\w+\/\d+/ ) {
+                $count++;
+                return WWW::Shorten::Flickr::makeashorterlink($uri);
+            }
+            else {
+                return $orig_uri;
+            }
         }
-        elsif ( $uri =~ /www\.flickr\.com\/photos\/\w+\/\d+/ ) {
-            $count++;
-            return WWW::Shorten::Flickr::makeashorterlink($uri);
-        }
-        else {
-            return $orig_uri;
-        }
-    });
+    );
 
-    $finder->find(\$body);
-    ($count, $body);
+    $finder->find( \$body );
+    ( $count, $body );
 }
 
 1;
