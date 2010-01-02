@@ -17,8 +17,5 @@ plugins:
         - title: bar
           body: http://flic.kr/p/79RpmB
   - module: Filter::Flicdotkr
-    config:
-      be: long
-      userid: poppen
 --- expected
 is $context->update->feeds->[0]->entries->[0]->body, "http://www.flickr.com/photos/poppen/4038311631/"
