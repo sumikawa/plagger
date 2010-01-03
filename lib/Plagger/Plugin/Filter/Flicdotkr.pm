@@ -15,11 +15,11 @@ sub filter {
             my ( $uri, $orig_uri ) = @_;
             if ( $uri =~ /flic\.kr\/p\/\w+/ ) {
                 $count++;
-                return WWW::Shorten::Flickr::makealongerlink($uri);
+                return makealongerlink($uri);
             }
             elsif ( $uri =~ /www\.flickr\.com\/photos\/\w+\/\d+/ ) {
                 $count++;
-                return WWW::Shorten::Flickr::makeashorterlink($uri);
+                return makeashorterlink($uri);
             }
             else {
                 return $orig_uri;
