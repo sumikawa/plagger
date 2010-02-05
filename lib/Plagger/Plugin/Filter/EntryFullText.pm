@@ -204,16 +204,6 @@ sub new {
         $data->{$key} = "^$data->{$key}" if $data->{$key} =~ m!^https?://!;
     }
 
-    # decode as UTF-8
-    for my $key ( qw(extract extract_date_format) ) {
-        next unless defined $data->{$key};
-	if (ref $data->{$key} && ref $data->{$key} eq 'ARRAY') {
-	    $data->{$key} = [ map decode("UTF-8", $_), @{$data->{$key}} ];
-	} else {
-	    $data->{$key} = decode("UTF-8", $data->{$key});
-	}
-    }
-
     bless {%$data, base => $base }, $class;
 }
 
