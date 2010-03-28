@@ -232,6 +232,7 @@ Plagger::Plugin::Publish::Maildir - Store Maildir
     config:
       maildir: /home/foo/Maildir
       folder: plagger
+      create_subfolders: 0
       attach_enclosures: 1
       mailfrom: plagger@localhost
 
