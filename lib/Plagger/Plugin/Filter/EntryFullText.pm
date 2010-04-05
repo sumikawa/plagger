@@ -194,6 +194,7 @@ sub handle { 0 }
 package Plagger::Plugin::Filter::EntryFullText::YAML;
 use Encode;
 use List::Util qw(first);
+use version;
 
 sub new {
     my($class, $data, $base) = @_;
@@ -202,6 +203,18 @@ sub new {
     for my $key ( qw(custom_feed_handle handle handle_force) ) {
         next unless defined $data->{$key};
         $data->{$key} = "^$data->{$key}" if $data->{$key} =~ m!^https?://!;
+    }
+
+    if (qv($YAML::VERSION) < qv('0.71')) {
+	# decode as UTF-8
+	for my $key ( qw(extract extract_date_format) ) {
+	    next unless defined $data->{$key};
+	    if (ref $data->{$key} && ref $data->{$key} eq 'ARRAY') {
+		$data->{$key} = [ map decode("UTF-8", $_), @{$data->{$key}} ];
+	    } else {
+		$data->{$key} = decode("UTF-8", $data->{$key});
+	    }
+	}
     }
 
     bless {%$data, base => $base }, $class;
