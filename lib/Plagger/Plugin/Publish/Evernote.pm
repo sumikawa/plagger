@@ -58,6 +58,7 @@ sub notify {
 
     my $feed = $args->{feed};
     my $subject = $feed->title || '(no-title)';
+    $subject =~ tr/"//d;
 
     my @enclosure_cb;
     if ($self->conf->{attach_enclosures}) {
