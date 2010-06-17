@@ -208,7 +208,7 @@ sub filename_for {
 
 sub safe_filename {
     my($path) = @_;
-    $path =~ s![^\w\s]+!_!g;
+    $path =~ s![^\w\s.]+!_!g;
     $path =~ s!\s+!_!g;
     $path;
 }
