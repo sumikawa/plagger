@@ -70,7 +70,7 @@ plugins:
     config:
       widget: delicious
 --- expected chomp
-<a href="http://del.icio.us/post?title=+%E3%82%BF%E3%82%A4%E3%83%97%E6%95%B0%E3%82%AB%E3%82%A6%E3%83%B3%E3%82%BF%E3%83%BC%E3%82%92%E3%83%93%E3%82%B8%E3%83%A5%E3%82%A2%E3%83%AB%E8%A1%A8%E7%A4%BA&amp;url=http%3A%2F%2Fsubtech.g.hatena.ne.jp%2Fmiyagawa%2F20060710%2F1152534733"><img src="http://del.icio.us/static/img/delicious.small.gif" alt="del.icio.us it!" style="border:0;vertical-align:middle" /></a>
+<a href="http://del.icio.us/post?title=+%C3%A3%C2%82%C2%BF%C3%A3%C2%82%C2%A4%C3%A3%C2%83%C2%97%C3%A6%C2%95%C2%B0%C3%A3%C2%82%C2%AB%C3%A3%C2%82%C2%A6%C3%A3%C2%83%C2%B3%C3%A3%C2%82%C2%BF%C3%A3%C2%83%C2%BC%C3%A3%C2%82%C2%92%C3%A3%C2%83%C2%93%C3%A3%C2%82%C2%B8%C3%A3%C2%83%C2%A5%C3%A3%C2%82%C2%A2%C3%A3%C2%83%C2%AB%C3%A8%C2%A1%C2%A8%C3%A7%C2%A4%C2%BA&amp;url=http%3A%2F%2Fsubtech.g.hatena.ne.jp%2Fmiyagawa%2F20060710%2F1152534733"><img src="http://del.icio.us/static/img/delicious.small.gif" alt="del.icio.us it!" style="border:0;vertical-align:middle" /></a>
 
 === Use Hatena Bookmark asset
 --- input config
