@@ -25,7 +25,7 @@ use Plagger::Feed;
 use Plagger::Subscription;
 use Plagger::Template;
 use Plagger::Update;
-use Plagger::UserAgent; # use to define $XML::Feed::RSS::PREFERRED_PARSER
+use Plagger::UserAgent;
 
 my $context;
 sub context     { $context }
@@ -58,6 +58,7 @@ sub new {
 
     $loader->load_recipes($config);
     $self->load_cache($opt{config});
+    $self->set_preferred_parser();
     $self->load_plugins(@{ $config->{plugins} || [] });
     $self->rewrite_config if @{ $self->{rewrite_tasks} };
 
@@ -75,6 +76,16 @@ sub clear_session {
     my $self = shift;
     $self->{update}       = Plagger::Update->new;
     $self->{subscription} = Plagger::Subscription->new;
+}
+
+sub set_preferred_parser {
+    my ($self) = @_;
+
+    if ($self->{conf}->{prefer_xml_rss_libxml}) {
+        $self->log(debug => "XML::Feed::RSS will prefer XML::RSS::LibXML");
+        $XML::Feed::Format::RSS::PREFERRED_PARSER
+      = $XML::Feed::RSS::PREFERRED_PARSER = "XML::RSS::LibXML";
+    }
 }
 
 sub add_rewrite_task {

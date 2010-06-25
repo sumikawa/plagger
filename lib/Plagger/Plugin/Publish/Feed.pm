@@ -11,7 +11,6 @@ eval {
     require XML::Feed::RSS;
     require XML::Feed::Format::RSS;
 };
-$XML::Feed::Format::RSS::PREFERRED_PARSER = $XML::Feed::RSS::PREFERRED_PARSER = "XML::RSS::LibXML";
 
 sub register {
     my($self, $context) = @_;
