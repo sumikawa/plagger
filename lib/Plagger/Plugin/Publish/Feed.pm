@@ -79,7 +79,7 @@ sub publish_feed {
             }
         }
 
-        $entry->category(join(' ', @{$e->tags})) if @{$e->tags};
+        $entry->category(@{$e->tags}) if @{$e->tags};
         $entry->issued($e->date)   if $e->date;
         $entry->modified($e->date) if $e->date;
 
