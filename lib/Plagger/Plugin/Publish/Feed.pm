@@ -96,8 +96,9 @@ sub publish_feed {
         $entry->id("tag:$taguri_base,2006:" . $e->id);
 
         if ($e->has_enclosure) {
+            $XML::Feed::MULTIPLE_ENCLOSURES = 1;
             for my $enclosure (grep { defined $_->url && !$_->is_inline } $e->enclosures) {
-                $entry->add_enclosure({
+                $entry->enclosure({
                     url    => $enclosure->url,
                     length => $enclosure->length,
                     type   => $enclosure->type,
@@ -136,30 +137,6 @@ sub make_author {
         return defined $author ? $author : 'nobody';
     }
 }
-
-# XXX okay, this is a hack until XML::Feed is updated
-*XML::Feed::Entry::Format::Atom::add_enclosure =
-*XML::Feed::Entry::Atom::add_enclosure = sub {
-    my($entry, $enclosure) = @_;
-    my $link = XML::Atom::Link->new;
-    $link->rel('enclosure');
-    $link->type($enclosure->{type});
-    $link->href($enclosure->{url});
-    $link->length($enclosure->{length});
-    $entry->{entry}->add_link($link);
-};
-
-*XML::Feed::Entry::Format::RSS::add_enclosure =
-*XML::Feed::Entry::RSS::add_enclosure = sub {
-    my($entry, $enclosure) = @_;
-    $entry->{entry}->{enclosure} = XML::RSS::LibXML::MagicElement->new(
-        attributes => {
-            url    => $enclosure->{url},
-            type   => $enclosure->{type},
-            length => $enclosure->{length},
-        }
-    );
-};
 
 1;
 
