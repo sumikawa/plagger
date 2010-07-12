@@ -179,6 +179,7 @@ my %entities = (
     '>' => '&gt;',
     '"' => '&quot;',
     "'" => '&apos;',
+    "&nbsp;" => '&#160;',
 );
 
 my $entities_re = join '|', keys %entities;

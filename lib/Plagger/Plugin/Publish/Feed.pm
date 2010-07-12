@@ -36,6 +36,12 @@ sub plugin_init {
     }
 }
 
+sub cleanup {
+    my ($in) = @_;
+    $in =~ s/&nbsp;/&#160;/g;
+    return $in;
+}
+
 sub publish_feed {
     my($self, $context, $args) = @_;
 
@@ -76,14 +82,14 @@ sub publish_feed {
         my $entry = XML::Feed::Entry->new($feed_format);
         $entry->title($e->title);
         $entry->link($e->permalink);
-        $entry->summary($e->body_text) if defined $e->body;
+        $entry->summary(cleanup($e->body_text)) if defined $e->body;
 
         # hack to bypass XML::Feed Atom 0.3 crufts (type="text/html")
         if ($self->conf->{full_content} && defined $e->body) {
             if ($feed_format eq 'RSS') {
-                $entry->content($e->body);
+                $entry->content(cleanup($e->body));
             } else {
-                $entry->{entry}->content($e->body->utf8);
+                $entry->{entry}->content(cleanup($e->body->utf8));
             }
         }
 
