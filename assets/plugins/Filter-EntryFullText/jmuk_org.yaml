@@ -1,0 +1,5 @@
+author: Shinsuke Matsui
+custom_feed_handle: http://www.jmuk.org/d/
+handle: http://www.jmuk.org/d/
+extract: <div class="section"><h3 class="subtitle">(.*?)</h3>(.*?)</div>
+extract_capture: title body

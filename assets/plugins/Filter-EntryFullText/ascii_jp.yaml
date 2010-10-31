@@ -1,0 +1,6 @@
+# update feeds of http://ascii.jp/
+author: poppen
+handle_force: http://ascii\.jp/elem/\d{3}/\d{3}/\d{3}/\d{6}/
+extract_xpath:
+  body: //div[@id="mainC"]
+

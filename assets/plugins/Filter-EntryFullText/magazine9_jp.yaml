@@ -1,0 +1,5 @@
+author: poppen
+handle: http://www\.magazine9\.jp/heiwa/\d{6}/
+extract_xpath:
+   body: //div[@id="kakomi"]
+

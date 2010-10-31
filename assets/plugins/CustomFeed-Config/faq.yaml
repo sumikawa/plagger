@@ -1,0 +1,4 @@
+author: poppen
+match: http://mltr\.e-city\.tv/index02\.html
+extract: <TITLE>(.*?)</TITLE>.*?<P><A href="index\.html">トップ・ページへ戻る</A></P>
+extract_capture: title body

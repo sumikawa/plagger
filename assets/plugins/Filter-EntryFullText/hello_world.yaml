@@ -1,0 +1,5 @@
+# Hello, world!
+author: yhara
+handle: http://rails.office.drecom.jp/takiuchi/archive/\d+
+extract_xpath:
+  body: //div[@class='entry-layer text']

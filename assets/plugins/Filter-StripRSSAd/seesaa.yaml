@@ -1,0 +1,3 @@
+condition: $args->{entry}->link =~ m!^http://match\.seesaa\.jp/ot_listing\.pl!
+strip: 1
+

@@ -1,0 +1,6 @@
+match: http://park5\.wakwak\.com/~rasen/diary\.html
+extract: <FONT SIZE="\+1">(\d+/\d+)</FONT><BR>(.*?)<HR WIDTH="60\%">
+extract_capture: title body
+extract_after_hook: |
+    $data->{link} = "http://park5\.wakwak\.com/~rasen/" . $data->{link};
+    $data->{body} =~ tr/A-Z/a-z/;

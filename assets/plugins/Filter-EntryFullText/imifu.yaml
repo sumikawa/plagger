@@ -1,0 +1,4 @@
+#http://imihu.blog30.fc2.com/
+handle: http://[^.]+\.blog\d+\.fc2\.com/blog-entry-\d+\.html
+extract_xpath:
+body: //div[@class="body"]

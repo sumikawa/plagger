@@ -1,0 +1,4 @@
+author: poppen
+handle: http://www\.nurs\.or\.jp/~ogochan/essay/archives/\d+
+extract_xpath:
+  body: //div[@class='entry']

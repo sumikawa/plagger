@@ -1,0 +1,4 @@
+handle: http://feedmeter\.net/detail\.php\?r=
+extract: <title>(.*?)</title>.*?(<img src="http://feedmeter.net/image.php.*?)</a>.*?\&lt\;\&lt\;</a>(.*?)<a href.*?(<td nowrap class="genre">人気度</td>.*?)</td>.*?(<td nowrap class="genre">更新頻度</td>.*?)</td>
+extract_capture: title body1 body2 body3 body4
+extract_after_hook: $data->{body} = "$data->{body1} <tr><td>$data->{body2}</td></tr> <tr>$data->{body3}</tr> <tr>$data->{body4}</tr>"

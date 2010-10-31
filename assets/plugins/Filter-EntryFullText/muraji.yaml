@@ -1,0 +1,9 @@
+# http://homepage2\.nifty\.com/muraji/
+author: poppen
+custom_feed_handle: http://homepage2\.nifty\.com/muraji/\w+/\w+.(?:htm|html)
+custom_feed_follow_link: /\w+/(\w|-)+\.(?:htm|html)
+handle: http://homepage2\.nifty\.com/muraji/\w+/(\w|-)+\.(?:htm|html)
+#extract: (?:<BODY.*?>|<body.*?>)(.*?)(?:</BODY>|</body>)
+#extract_capture: body
+extract_xpath:
+  body: /html//body

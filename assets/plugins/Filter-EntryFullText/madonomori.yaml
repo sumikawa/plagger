@@ -1,0 +1,4 @@
+author: poppen
+handle: http://www\.forest\.impress\.co\.jp/article/\d+/\d+/\d+/.*?\.html$
+extract: <!-- 本文開始 -->(.*?)<!--■■■■記事執筆者署名■■■■-->
+extract_capture: body

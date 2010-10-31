@@ -1,0 +1,3 @@
+match: http://www\.ltokyo\.com/ohmori/
+extract: <strong>(.*?)</strong><BR><BR>(.*?)<strong>
+extract_capture: title body

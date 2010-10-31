@@ -1,0 +1,3 @@
+handle: http://www\.kajisoku\.org/archives/eid\d+\.html
+extract_xpath:
+  body: //div[@class="entry_body"]
