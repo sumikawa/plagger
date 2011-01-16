@@ -1,0 +1,5 @@
+author: TERAMOTO Masahiro
+handle: http://\w+\.wsj\.com/\w+/
+extract_xpath:
+  body: //div[@class="articlePage" or @class="article story"]
+referer: http://www.google.co.jp/
