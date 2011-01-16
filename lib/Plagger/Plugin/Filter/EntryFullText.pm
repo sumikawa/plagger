@@ -105,6 +105,18 @@ sub filter {
         return;
     }
 
+    my @handlers = $handler ? ($handler) : @{ $self->{plugins} };
+
+    for my $plugin (@handlers) {
+        if ( $handler || $plugin->handle($args) ) {
+	    if ($plugin->referer) {
+		$self->{ua}->default_header('Referer' => $plugin->referer);
+		$self->log(debug => "Set ". $plugin->referer . " as HTTP Referer header");
+		last
+	    }
+	}
+    }
+
     # NoNetwork: don't connect for 3 hours
     my $res = $self->{ua}->fetch( $args->{entry}->permalink, $self, { NoNetwork => 60 * 60 * 3 } );
     if (!$res->status && $res->is_error) {
@@ -190,6 +202,7 @@ sub custom_feed_follow_link { }
 sub custom_feed_follow_xpath { }
 sub handle_force { 0 }
 sub handle { 0 }
+sub referer { }
 
 package Plagger::Plugin::Filter::EntryFullText::YAML;
 use Encode;
@@ -222,6 +235,11 @@ sub new {
 sub site_name {
     my $self = shift;
     $self->{base};
+}
+
+sub referer {
+    my $self = shift;
+    $self->{referer};
 }
 
 sub custom_feed_handle {
