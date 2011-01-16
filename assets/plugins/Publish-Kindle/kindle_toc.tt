@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+    <title>Table of Contents</title>
+  </head>
+  <body>
+    <h1>Table of Contents</h1>
+
+[% FOREACH feed = feeds -%]
+    <h2>[% feed.title | html %]([% feed.count %])</h2>
+
+    <ul>
+[% FOREACH entry = feed.entries -%]
+      <li><a href="[% feed.publish_path | html %]/[% entry.feed2entry_link | html %]">[% entry.title || '(no-title)' | html %]</a></li>
+[% END -%]
+    </ul>
+    <mbp:pagebreak />
+[% END -%]
+  </body>
+</html>
