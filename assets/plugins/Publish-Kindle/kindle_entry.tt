@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+  <head>
+    <title>[% (entry.title || '(no-title)') | html %]</title>
+  </head>
+
+  <body>
+    <div>
+      <h1>[% (entry.title || '(no-title)') | html %]</h1>
+      <hr />
+[% IF entry.body -%]
+[% entry.body %]
+      <hr />
+[% END -%]
+[% IF conf.mobile_gw %]&gt;<a href="[% conf.mobile_gw %][% entry.permalink | uri %]">permalink</a><br />[% END %]
+[% IF entry.date %]Posted on [% entry.date.format('Mail') %]<br />[% END %]
+[% IF entry.author %]by [% entry.author | html %]<br />[% END %]
+    </div>
+  </body>
+</html>
