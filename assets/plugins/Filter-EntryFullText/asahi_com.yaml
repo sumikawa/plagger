@@ -1,5 +1,7 @@
-# upgrade http://www3.asahi.com/rss/index.rdf or http://bulknews.net/rss/rdf.cgi?Asahi
-author: Tatsuhiko Miyagawa
+author: TERAMOTO Masahiro
 handle: http://www\.asahi\.com/
-extract: <!-- End of Headline --><div class="day">.*?</div>(.*?)<!-- google_ad_section_end
-extract_capture: body
+extract_xpath:
+  thmb: //div[@class="ThmbCol"]
+  bodytxt: //div[@class="BodyTxt"]
+extract_after_hook: |
+  $data->{body} = $data->{thmb} . $data->{bodytxt};

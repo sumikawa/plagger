@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" xmlns:mbp="http://www.mobipocket.com" version="2005-1" xml:lang="en">
+  <docTitle>
+    <text>[% conf.title | html %] ([% modified.strftime('%Y-%m-%d %H:%M %Z') %])</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="index" playOrder="1">
+      <navLabel>
+	<text>Table of Contents</text>
+      </navLabel>
+      <content src="toc.html"/>
+    </navPoint>
+[% i = 2 -%]
+[% FOREACH feed = feeds -%]
+[% FOREACH entry = feed.entries -%]
+    <navPoint id="[% feed.id | html %]_[% entry.id_safe | html %]" playOrder="[% i %]">
+      <navLabel>
+	<text>[% entry.title.plaintext | html %]</text>
+      </navLabel>
+      <content src="[% feed.publish_path | html %]/[% entry.feed2entry_link | html %]"/>
+    </navPoint>
+[% i = i + 1 -%]
+[% END -%]
+[% END -%]
+  </navMap>
+</ncx>

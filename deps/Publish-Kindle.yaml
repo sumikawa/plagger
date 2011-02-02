@@ -1,0 +1,6 @@
+name: Publish::Kindle
+author: TERAMOTO Masahiro
+depends: 
+  Mail::Address: 0
+  MIME::Lite: 0
+  Net::SMTP::TLS: 0
