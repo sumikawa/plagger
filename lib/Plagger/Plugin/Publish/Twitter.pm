@@ -39,24 +39,34 @@ sub publish_entry {
     my $body = $args->{entry}->body_text;
 
     if ($self->conf->{templatize}) {
-	$body = $self->templatize('twitter.tt', $args);
+        $body = $self->templatize('twitter.tt', $args);
     }
 
-    my $maxlength = $self->conf->{maxlength} || 159;
-    if (length($body) > $maxlength) {
-        $body = substr($body, 0, $maxlength);
+    foreach my $line (split("\n", $body)) {
+
+        my $maxlength = $self->conf->{maxlength} || 159;
+        if (length($line) > $maxlength) {
+            $line = substr($line, 0, $maxlength);
+        }
+
+        if ($Net::Twitter::VERSION < '3.00000') {
+            $line = encode_utf8( $line );
+        }
+
+        $context->log(info => "Updating Twitter status to '$line'");
+        my $message = $self->conf->{geo} && $args->{entry}{location}?
+            {
+                status => $line,
+                lat => $args->{entry}{location}->latitude(),
+                long => $args->{entry}{location}->longitude(),
+            }:
+            $line;
+        $self->{twitter}->update( $message ) or $context->error("Can't update twitter status");
+
+        my $sleeping_time = $self->conf->{interval} || 15;
+        $context->log(info => "sleep $sleeping_time.");
+        sleep( $sleeping_time );
     }
-
-    if ($Net::Twitter::VERSION < '3.00000') {
-	$body = encode_utf8( $body );
-    }
-
-    $context->log(info => "Updating Twitter status to '$body'");
-    $self->{twitter}->update( $body ) or $context->error("Can't update twitter status");
-
-    my $sleeping_time = $self->conf->{interval} || 15;
-    $context->log(info => "sleep $sleeping_time.");
-    sleep( $sleeping_time );
 }
 
 1;
@@ -126,6 +136,10 @@ If you do point to a different URL, you will also need to set "apihost" and "api
 =item templatize
 Optional.
 A flag to use Template-Toolkit to message formatting. Defaults to 0.
+
+=item geo
+Optional.
+A flag to send geolocation to Twitter. Defaults to 0.
 
 =back
 
