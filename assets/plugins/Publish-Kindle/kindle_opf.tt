@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="Id">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dc:title>[% conf.title | html %] ([% modified.strftime('%Y-%m-%d %H:%M %Z') %])</dc:title>
+    <dc:language>en</dc:language>
+    <dc:identifier id="Id" opf:scheme="URN">urn:uuid:[% id %]</dc:identifier>
+    <dc:creator>Plagger/[% version | html %]</dc:creator>
+    <dc:publisher>Plagger/[% version | html %]</dc:publisher>
+    <dc:date xsi:type="dcterms:W3CDTF">[% modified.serialize %]</dc:date>
+  </metadata>
+
+  <manifest>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="index" href="toc.html" media-type="application/xhtml+xml"/>
+[% FOREACH feed = feeds -%]
+[% FOREACH entry = feed.entries -%]
+    <item id="[% feed.id | html %]_[% entry.id_safe | html %]" media-type="application/xhtml+xml" href="[% feed.publish_path | html %]/[% entry.feed2entry_link | html %]"></item>
+[% END -%]
+[% END -%]
+  </manifest>
+
+  <spine toc="ncx">
+    <itemref idref="index"/>
+[% FOREACH feed = feeds -%]
+[% FOREACH entry = feed.entries -%]
+    <itemref idref="[% feed.id | html %]_[% entry.id_safe | html %]"/>
+[% END -%]
+[% END -%]
+  </spine>
+
+  <guide>
+    <reference type="toc" title="Table of Contents" href="toc.html"></reference>
+    <reference type="text" title="Table of Contents" href="toc.html"></reference>
+  </guide>
+
+</package>

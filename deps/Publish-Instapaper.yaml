@@ -1,0 +1,4 @@
+name: Publish::Instapaper
+author: TERAMOTO Masahiro
+depends: 
+  WWW::Instapaper::Client: 0
