@@ -18,18 +18,19 @@ sub register {
 sub initialize {
     my($self, $context) = @_;
     my %opt = (
-        traits   => ['API::REST', 'OAuth'], 
-        username => $self->conf->{username},
-        password => $self->conf->{password},
+        traits   => ['API::REST', 'OAuth'],
     );
+    if ($self->conf->{access_token} and $self->conf->{access_token_secret}) {
+        $opt{access_token}        = $self->conf->{access_token};
+        $opt{access_token_secret} = $self->conf->{access_token_secret};
+    } else {
+        $opt{username} = $self->conf->{username};
+        $opt{passowrd} = $self->conf->{password};
+    }
     for my $key (qw/apihost apiurl apirealm consumer_key consumer_secret/) {
         $opt{$key} = $self->conf->{$key} if $self->conf->{$key};
     }
     my $nettwitter = Net::Twitter->new(%opt);
-    if ($self->conf->{access_token} and $self->conf->{access_token_secret}) {
-        $nettwitter->access_token($self->conf->{access_token});
-        $nettwitter->access_token_secret($self->conf->{access_token_secret});
-    }
     $self->{twitter} = $nettwitter;
 }
 
@@ -69,8 +70,20 @@ Plagger::Plugin::Publish::Twitter - Update your status with feeds
 
   - module: Publish::Twitter
     config:
-      username: twitter-id
-      password: twitter-password
+      consumer_key: ****
+      consumer_secret: ****
+      access_token: ****
+      access_token_secret: ****
+
+or
+
+  - module: Publish::Twitter
+    config:
+      apiurl: http://api.wassr.jp/
+      apihost: api.wassr.jp:80
+      apirealm: API Authentication
+      username: wassr-id
+      password: wassr-password
 
 =head1 DESCRIPTION
 
@@ -107,7 +120,7 @@ OPTIONAL. The URL of the API for twitter.com. This defaults to "http://twitter.c
 Optional.
 If you do point to a different URL, you will also need to set "apihost" and "apirealm" so that the internal LWP can authenticate.
 
-    "apihost" defaults to "www.twitter.com:80".
+    "apihost" defaults to "api.twitter.com:80".
     "apirealm" defaults to "Twitter API".
 
 =item templatize
