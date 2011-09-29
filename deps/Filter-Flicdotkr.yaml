@@ -1,0 +1,5 @@
+name: Filter::Flicdotkr
+author: Shinsuke Matsui, Tatsuhiko Miyagawa
+depends: 
+  URI::Find: 0
+  WWW::Shorten::Flickr: 0

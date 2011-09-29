@@ -1,0 +1,7 @@
+match: http://news\.google\.(?:co\.jp|com)/
+extract: <a href="(http://[^"]*)" id=r-\d[^>]*><b>([^<]*)</b></a>
+extract_capture: link title
+fetch_before_hook: |
+  my $ned = $url->query_param('ned') || 'us';
+  $ned = "t$ned" unless $ned =~ /^t/;
+  $url->query_param(ned => $ned);

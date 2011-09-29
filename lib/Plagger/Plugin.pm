@@ -161,7 +161,8 @@ sub load_assets {
      );
 
     # $rule isa File::Find::Rule
-    for my $file ($rule->in($self->assets_dir)) {
+    #for my $file ($rule->in($self->assets_dir)) {
+    for my $file (sort($rule->in($self->assets_dir))) {
         my $base = File::Basename::basename($file);
         $callback->($file, $base);
     }

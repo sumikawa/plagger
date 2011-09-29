@@ -1,0 +1,4 @@
+author: poppen
+handle: http://onk\.blog\.drecom\.jp/archive/\d+
+extract_xpath:
+  body: //div[@class='entry_text']

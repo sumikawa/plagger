@@ -1,0 +1,6 @@
+match: http://motoyuki\.bsdclub\.org/d/current\.html
+extract: <h2 class="tds-date"><a href="(.*?)" name="(?:\d+)">(.*?)\((?:\w+)\)</a>(.*?)<hr>
+extract_capture: link title body
+extract_after_hook: |
+    $data->{link} = "http://motoyuki\.bsdclub/.org/d/" . $data->{link};
+    $data->{date} = $data->{title};

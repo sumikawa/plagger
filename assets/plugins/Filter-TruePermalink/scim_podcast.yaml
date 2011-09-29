@@ -1,0 +1,4 @@
+# http://www.sciam.com/podcast/podcast.mp3?e_id=A630DE18-D796-FFAB-6D2E32BDF391397D&ref=p_rss
+#author: Shinsuke Matsui
+#match: http://www\.sciam\.com/podcast
+#query_param: e_id

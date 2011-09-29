@@ -1,0 +1,9 @@
+match: http://mew5.com/
+author: Tennetiss
+extract: <A name=([^>]*)></A>.*?<font color="#ffffff">(.*?)</font></td></table>[\n]<pre>(.*?)</pre>[\n]<A name=\d\d\d\d
+extract_capture: link title body
+extract_encode: cp932
+extract_after_hook: |
+  $data->{link} = 'http://mew5.com/#' . $data->{link};
+  $data->{body} =~ s/[\n]/<br>/g;
+

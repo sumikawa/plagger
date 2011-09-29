@@ -15,7 +15,7 @@ sub extract {
 
     my $match =
          $name     ? qq!<h3><a href=".*?" name="$name">.*?</h3>(.*?)</div>! :
-         $day_only ? qq!<div class="section">(.*?)</div>! :
+         $day_only ? qq!<div class="section">(.*?)</p>\s+</div>! :
                      qq!</h3>(.*?)</div>!;
 
     if ( $args->{content} =~ /$match/s ){

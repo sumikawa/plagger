@@ -1,0 +1,6 @@
+# http://nemuihito.at.webry.info/
+author: poppen
+handle: http://nemuihito\.at\.webry\.info/\d{6}/article_\d+\.html
+extract_xpath:
+  body: //table[@id='blog-body-container']
+

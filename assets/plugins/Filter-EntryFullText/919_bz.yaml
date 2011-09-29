@@ -1,0 +1,7 @@
+# http://blog.919.bz/
+author: poppen
+extract: <div class="main">(.*?)</div>.*?<a name="more">.*?</a>.*?<div class="mainmore">(.*?)</div>
+extract_capture: body body_more
+extract_after_hook: |
+  $data->{body} .= $data->{body_more} if $data->{body_more};
+

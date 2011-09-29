@@ -1,0 +1,5 @@
+# http://ansokuwww.blog50.fc2.com/?xml
+author: Shinsuke Matsui
+handle: http://ansokuwww\.blog50\.fc2\.com/blog-entry-\d+\.html
+extract_xpath:
+  body: //td[@class="msgcell"]

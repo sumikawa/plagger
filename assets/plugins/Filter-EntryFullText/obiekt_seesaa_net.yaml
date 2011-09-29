@@ -1,0 +1,6 @@
+# update http://obiekt.seesaa.net/
+author: poppen
+handle_force: http://obiekt\.seesaa\.net/article/\d+\.html
+extract_xpath:
+  body: //div[@class="blogbody"]
+
