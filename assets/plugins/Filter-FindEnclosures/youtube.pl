@@ -1,5 +1,6 @@
 # author: mizzy
 use Plagger::Util qw( decode_content );
+use WWW::YouTube::Download;
 
 sub handle {
     my ($self, $url) = @_;
@@ -25,11 +26,12 @@ sub find {
             $args->{content} = decode_content($res);
         }
 
-    if ($args->{content} =~ /video_id=([^&]+)&.+?&t=([^&]+)/gms){
+    if ($args->{content} =~ /"t":\s"[^"]+".+"video_id":\s"([^"]+)"/gms) {
         my $enclosure = Plagger::Enclosure->new;
-        $enclosure->url("http://youtube.com/get_video?video_id=$1&t=$2");
-        $enclosure->type('video/flv');
-        $enclosure->filename("$1.flv");
+        my $client = WWW::YouTube::Download->new;
+        $enclosure->url($client->get_video_url($1));
+        $enclosure->filename("$1." . $client->get_suffix($1));
+        $enclosure->type( Plagger::Util::mime_type_of("$1." . $client->get_suffix($1)) );
         return $enclosure;
     }
 
