@@ -26,7 +26,7 @@ sub find {
             $args->{content} = decode_content($res);
         }
 
-    if ($args->{content} =~ /"t":\s"[^"]+".+"video_id":\s"([^"]+)"/gms) {
+    if ($args->{content} =~ /\'VIDEO_ID\':\s+"([^"]+)",/gms) {
         my $enclosure = Plagger::Enclosure->new;
         my $client = WWW::YouTube::Download->new;
         $enclosure->url($client->get_video_url($1));
