@@ -51,7 +51,7 @@ sub filter {
         my $output_file = File::Spec->catfile($self->conf->{dir}, "$file");
         my $output_options = {
             file    => $self->convert($output_file),
-            device  => $self->conf->{device} || 'ipod',
+            device  => $self->conf->{device},
             title   => $self->convert($entry->title),
             author  => $self->convert($entry->author),
             comment => $self->convert($entry->summary),
