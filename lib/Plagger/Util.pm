@@ -153,7 +153,7 @@ sub load_uri {
 
 our $mimetypes = MIME::Types->new;
 $mimetypes->addType( MIME::Type->new(type => 'video/x-flv', extensions => [ 'flv' ]) );
-$mimetypes->addType( MIME::Type->new(type => 'audio/aac', extensions => [ 'm4a', 'aac' ]) );
+$mimetypes->addType( MIME::Type->new(type => 'audio/x-m4a', extensions => [ 'm4a', 'aac' ]) );
 $mimetypes->addType( MIME::Type->new(type => 'video/mp4', extensions => [ 'mp4', 'm4v' ]) );
 
 sub mime_type_of {
