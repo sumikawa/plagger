@@ -1,0 +1,5 @@
+# Counterpunch - America's Best Political Newsletter 
+author: Stefan Kangas
+handle: http://(www\.)?counterpunch\.org/.+\.html
+extract: <TITLE>(.*?)</TITLE>.*?(<h1[^>]*>.+?)<p>\&nbsp\;</p>
+extract_capture: title body

@@ -64,9 +64,12 @@ plugins:
 
   - module: Filter::Pipe
     config:
-      command: ruby -e 'print \$stdin.read'
+      command: perl -e 'print while (<>)'
       encoding: utf8
       text_only: 1
 --- expected
-unlike $warnings, qr/timeout/, "no timeout";
-
+if (defined $warnings) {
+   unlike $warnings, qr/timeout/, "no timeout";
+} else {
+   1;
+}

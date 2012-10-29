@@ -11,7 +11,6 @@ eval {
     require XML::Feed::RSS;
     require XML::Feed::Format::RSS;
 };
-$XML::Feed::Format::RSS::PREFERRED_PARSER = $XML::Feed::RSS::PREFERRED_PARSER = "XML::RSS::LibXML";
 
 sub register {
     my($self, $context) = @_;
@@ -35,6 +34,12 @@ sub plugin_init {
     unless (exists $self->conf->{full_content}) {
         $self->conf->{full_content} = 1;
     }
+}
+
+sub cleanup {
+    my ($in) = @_;
+    $in =~ s/&nbsp;/&#160;/g;
+    return $in;
 }
 
 sub publish_feed {
@@ -64,23 +69,31 @@ sub publish_feed {
         $feed->{atom}->id("tag:$taguri_base,2006:" . $f->id); # XXX what if id is empty?
     }
 
+    if ($self->conf->{hub} && $feed_format eq 'Atom') {
+        $feed->{atom}->add_link({ rel => 'hub', href => $self->conf->{hub}, });
+    }
+
+    if ($self->conf->{self} && $feed_format eq 'Atom') {
+        $feed->{atom}->add_link({ rel => 'self', href => $self->conf->{self}, });
+    }
+
     # add entry
     for my $e ($f->entries) {
         my $entry = XML::Feed::Entry->new($feed_format);
         $entry->title($e->title);
         $entry->link($e->permalink);
-        $entry->summary($e->body_text) if defined $e->body;
+        $entry->summary(cleanup($e->body_text)) if defined $e->body;
 
         # hack to bypass XML::Feed Atom 0.3 crufts (type="text/html")
         if ($self->conf->{full_content} && defined $e->body) {
             if ($feed_format eq 'RSS') {
-                $entry->content($e->body);
+                $entry->content(cleanup($e->body));
             } else {
-                $entry->{entry}->content($e->body->utf8);
+                $entry->{entry}->content(cleanup($e->body->utf8));
             }
         }
 
-        $entry->category(join(' ', @{$e->tags})) if @{$e->tags};
+        $entry->category(@{$e->tags}) if @{$e->tags};
         $entry->issued($e->date)   if $e->date;
         $entry->modified($e->date) if $e->date;
 
@@ -97,8 +110,9 @@ sub publish_feed {
         $entry->id("tag:$taguri_base,2006:" . $e->id);
 
         if ($e->has_enclosure) {
+            $XML::Feed::MULTIPLE_ENCLOSURES = 1;
             for my $enclosure (grep { defined $_->url && !$_->is_inline } $e->enclosures) {
-                $entry->add_enclosure({
+                $entry->enclosure({
                     url    => $enclosure->url,
                     length => $enclosure->length,
                     type   => $enclosure->type,
@@ -137,30 +151,6 @@ sub make_author {
         return defined $author ? $author : 'nobody';
     }
 }
-
-# XXX okay, this is a hack until XML::Feed is updated
-*XML::Feed::Entry::Format::Atom::add_enclosure =
-*XML::Feed::Entry::Atom::add_enclosure = sub {
-    my($entry, $enclosure) = @_;
-    my $link = XML::Atom::Link->new;
-    $link->rel('enclosure');
-    $link->type($enclosure->{type});
-    $link->href($enclosure->{url});
-    $link->length($enclosure->{length});
-    $entry->{entry}->add_link($link);
-};
-
-*XML::Feed::Entry::Format::RSS::add_enclosure =
-*XML::Feed::Entry::RSS::add_enclosure = sub {
-    my($entry, $enclosure) = @_;
-    $entry->{entry}->{enclosure} = XML::RSS::LibXML::MagicElement->new(
-        attributes => {
-            url    => $enclosure->{url},
-            type   => $enclosure->{type},
-            length => $enclosure->{length},
-        }
-    );
-};
 
 1;
 

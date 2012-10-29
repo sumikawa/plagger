@@ -1,0 +1,5 @@
+# MR Zine -- Monthly Review Online
+author: Stefan Kangas
+handle: http://mrzine\.monthlyreview\.org/201\d/.+\.html
+extract: <title>(.*?)</title>.*?<p[^>]*?>(.*<hr>.*?)<hr>\s*<span class="style3">\s*<script>
+extract_capture: title body

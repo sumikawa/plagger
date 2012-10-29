@@ -44,20 +44,25 @@ sub filter {
         my $filename = $enclosure->filename;
         Encode::_utf8_off($filename);
         my $path = File::Spec->catfile($feed_dir, $filename);
-        $context->log(info => "fetch " . $enclosure->url . " to " . $path);
 
-        my $request = HTTP::Request->new(GET => $enclosure->url);
-        if ($self->conf->{fake_referer}) {
-            $context->log(debug => "Sending Referer: " . $args->{entry}->permalink);
-            $request->header('Referer' => $args->{entry}->permalink);
-        }
+        unless (-e $path) {
+            $context->log(info => "fetch " . $enclosure->url . " to " . $path);
 
-        my $res = $ua->mirror($request, $path);
-        $enclosure->local_path($path); # set to be used in later plugins
+            my $request = HTTP::Request->new(GET => $enclosure->url);
+            if ($self->conf->{fake_referer}) {
+                $context->log(debug => "Sending Referer: " . $args->{entry}->permalink);
+                $request->header('Referer' => $args->{entry}->permalink);
+            }
 
-        # Fix length if it's broken
-        if ($res->header('Content-Length')) {
-            $enclosure->length( $res->header('Content-Length') );
+            my $res = $ua->mirror($request, $path);
+            $enclosure->local_path($path); # set to be used in later plugins
+
+            # Fix length if it's broken
+            if ($res->header('Content-Length')) {
+                $enclosure->length( $res->header('Content-Length') );
+            }
+        } else {
+            $enclosure->local_path($path); # set to be used in later plugins
         }
     }
 }

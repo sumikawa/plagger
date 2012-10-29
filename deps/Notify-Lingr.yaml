@@ -1,3 +1,4 @@
 name: Notify::Lingr
 author: Tatsuhiko Miyagawa
 depends:
+  POE::Component::IKC::ClientLite: 0

@@ -179,6 +179,7 @@ my %entities = (
     '>' => '&gt;',
     '"' => '&quot;',
     "'" => '&apos;',
+    "&nbsp;" => '&#160;',
 );
 
 my $entities_re = join '|', keys %entities;
@@ -208,7 +209,7 @@ sub filename_for {
 
 sub safe_filename {
     my($path) = @_;
-    $path =~ s![^\w\s]+!_!g;
+    $path =~ s![^\w\s.]+!_!g;
     $path =~ s!\s+!_!g;
     $path;
 }

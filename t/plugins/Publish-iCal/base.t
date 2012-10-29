@@ -53,7 +53,7 @@ plugins:
 ok -e $::output;
 my $ical = Data::ICal->new(filename => $::output);
 is @{$ical->entries}, 2;
-is $ical->entries->[0]->property('dtstart')->[0]->value, "20061020";
+is $ical->entries->[0]->property('dtstart')->[0]->value, "20061020T000000";
 is_deeply $ical->entries->[0]->property('dtstart')->[0]->parameters, { VALUE => 'DATE' };
 
 === Timezone UTC

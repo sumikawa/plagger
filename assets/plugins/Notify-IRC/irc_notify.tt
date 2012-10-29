@@ -1,1 +1,1 @@
-[% IF feed.title %][% feed.title_text %]: [% END %][% entry.title_text %][% IF entry.author %] (03[% entry.author %])[% END %][% IF entry.tags %] [[% entry.tags.join(', ') %]] [% END %] - 14[% entry.permalink %]
+[% IF entry.meta.irc_text %][% entry.meta.irc_text %][% ELSE %][% entry.title_text %][% IF entry.tags.size %] [[% entry.tags.join(', ') %]][% END %] [% entry.permalink %][% END %]

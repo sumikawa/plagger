@@ -67,6 +67,7 @@ sub start_element {
             $feed->title(_attr($ref, 'title', 'text'));
             $feed->tags([ grep { defined && $_ ne 'Subscriptions' } @{$self->{containers}} ]);
             $self->{callback}->($feed);
+            $self->{dont_pop}=1;
         } else {
             my $tag = _attr($ref, 'title', 'text');
             push @{$self->{containers}}, $tag;
@@ -79,7 +80,8 @@ sub end_element {
     my($ref) = @_;
 
     if ($ref->{LocalName} eq 'outline') {
-        pop @{$self->{containers}};
+        pop @{$self->{containers}} unless $self->{dont_pop};
+        $self->{dont_pop}=0;
     }
 }
 

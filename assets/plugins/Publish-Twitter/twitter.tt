@@ -1,1 +1,1 @@
-[% IF entry.body %][% entry.body_text %][% ELSE %][% entry.title_text %][% END %] [% entry.permalink %]
+[% IF entry.meta.twitter_text %][% entry.meta.twitter_text %][% ELSE %][% entry.title_text %][% IF entry.tags.size %] [[% entry.tags.join(', ') %]][% END %] [% entry.permalink %][% END %]

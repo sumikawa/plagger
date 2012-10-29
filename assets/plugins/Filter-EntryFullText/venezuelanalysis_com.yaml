@@ -1,0 +1,5 @@
+# venezuelanalysis.com - News, Views, and Analysis
+author: Stefan Kangas
+handle: http://(www\.)?venezuelanalysis\.com/[^/]+/\d+
+extract: <h1 class="title">(.*?)</h1>.*?<div class="content-text-inner">\s*(.*)\s*<div id="content-body-bottom">
+extract_capture: title body

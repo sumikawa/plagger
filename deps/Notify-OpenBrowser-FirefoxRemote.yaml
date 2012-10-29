@@ -1,3 +1,4 @@
 name: Notify::OpenBrowser::FirefoxRemote
 author: Tatsuhiko Miyagawa
 depends:
+  Net::Telnet: 0

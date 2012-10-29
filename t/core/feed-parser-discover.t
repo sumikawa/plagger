@@ -30,14 +30,14 @@ http://bulknews.typepad.com/blog/atom.xml
 --- expected
 http://bulknews.typepad.com/blog/atom.xml
 
-=== Auto-Disocvery
+=== Auto-Discovery
 --- input
 http://subtech.g.hatena.ne.jp/miyagawa/
 --- expected
 http://subtech.g.hatena.ne.jp/miyagawa/rss2
 
-=== No RSS Auto-Discovery
+=== No RSS Auto-Discovery when not found
 --- input
-http://www.asahi.com
+http://www.google.com
 --- expected eval
 undef
