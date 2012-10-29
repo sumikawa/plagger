@@ -29,7 +29,7 @@ sub find {
     if ($args->{url} =~ /watch\?v=([^&]+)/gms) {
         my $enclosure = Plagger::Enclosure->new;
         my $client = WWW::YouTube::Download->new;
-        $enclosure->url($client->get_video_url($1));
+	$enclosure->url($client->playback_url($1, {fmt => 18,}));
         $enclosure->filename("$1." . $client->get_suffix($1));
         $enclosure->type( Plagger::Util::mime_type_of("$1." . $client->get_suffix($1)) );
         return $enclosure;
