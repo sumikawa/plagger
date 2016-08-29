@@ -25,9 +25,14 @@ sub filter {
             '1 day',
         );
 
+#	my $meta = $self->fetch_metadata($enclosure->url);
         unless ($meta) {
             $context->log(error => "Can't get metadata from " . $enclosure->url);
             next;
+        }
+
+        if ($meta->{date}) {
+            $enclosure->date($meta->{date}) ;
         }
 
         if ($meta->{length}) {
@@ -64,6 +69,8 @@ sub fetch_metadata {
     return {
         'length' => _header($res, 'Content-Length'),
         'type'   => _header($res, 'Content-Type'),
+        'date'   => Plagger::Date->parse('HTTP', _header($res, 'Last-Modified')),
+#        'date'   => _header($res, 'Last-Modified'),
         'filename' => scalar _filename($res),
     };
 }

@@ -2,7 +2,7 @@ package Plagger::Enclosure;
 use strict;
 
 use base qw( Class::Accessor::Fast );
-__PACKAGE__->mk_accessors(qw( length type local_path is_inline ));
+__PACKAGE__->mk_accessors(qw( date length type local_path is_inline ));
 
 use Plagger::Util;
 use URI;

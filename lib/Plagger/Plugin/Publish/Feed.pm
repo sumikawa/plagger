@@ -117,6 +117,8 @@ sub publish_feed {
                     length => $enclosure->length,
                     type   => $enclosure->type,
                 });
+		$entry->issued($enclosure->date)   if $enclosure->date;
+		$entry->modified($enclosure->date) if $enclosure->date;
 
                 # RSS 2.0 by spec doesn't allow multiple enclosures
                 last if $feed_format eq 'RSS';
